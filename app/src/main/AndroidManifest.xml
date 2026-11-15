@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- AAOS parked-app feature set (developer.android.com/training/cars/parked/automotive-os) -->
+    <uses-feature android:name="android.hardware.type.automotive" android:required="true" />
+    <uses-feature android:name="android.hardware.wifi" android:required="false" />
+    <uses-feature android:name="android.hardware.screen.portrait" android:required="false" />
+    <uses-feature android:name="android.hardware.screen.landscape" android:required="false" />
+
+    <!-- Pleos Vehicle SDK 2.3.2, read-only. Mapping from docs (Vehicle/vehicle-permission) and the SDK's
+         @RequiresCustomPermission annotations (SteeringWheel angle = CAR_DRIVE). No CONTROL_* needed. -->
+    <uses-permission android:name="pleos.car.permission.CAR_LIGHTS" />  <!-- TurnSignal, Light(low beam) -->
+    <uses-permission android:name="pleos.car.permission.CAR_DRIVE" />   <!-- Brake, SteeringWheel -->
+    <uses-permission android:name="pleos.car.permission.CAR_WINDOWS" /> <!-- Wiper -->
+    <uses-permission android:name="pleos.car.permission.CAR_SEATS" />   <!-- Seat occupancy, belt buckled -->
+    <!-- Safety telltales LCA_LEFT/LCA_RIGHT (후측방 경고). registerTelltales needs PRIVATE_CAR_SAFETY (javap @RequiresPermission;
+         CAR_SAFETY alone throws SecurityException on the emulator). If a car refuses it, the call fails safely and
+         blind-spot stays unknown (→ 판독 불가). -->
+    <uses-permission android:name="pleos.car.permission.PRIVATE_CAR_SAFETY" />
+    <!-- NaviHelper. TODO(verify): docs map NAVI_ROUTE to get*Info; unclear whether
+         onCurrentRoadSpeedLimit / onCautionPointInfo events need it. -->
+    <uses-permission android:name="pleos.car.permission.NAVI_ROUTE" />
+
+    <!-- AAOS CarPropertyManager. CAR_SPEED is a *dangerous* permission → requested at runtime. -->
+    <uses-permission android:name="android.car.permission.CAR_SPEED" />      <!-- PERF_VEHICLE_SPEED -->
+    <uses-permission android:name="android.car.permission.CAR_POWERTRAIN" /> <!-- GEAR_SELECTION -->
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Material.NoActionBar">
+
+        <!-- Share card PNG (cacheDir/shared) → ACTION_SEND -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- distractionOptimized: AAOS lets this activity stay on screen while driving. Until gear == P it renders ONLY
+             깜이's face and the passenger's 훈수! button (no lists, no verdicts); see App() parked gate.
+             configChanges=uiMode: day/night switch recomposes in place instead of recreating (keeps the current screen). -->
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="uiMode"
+            android:exported="true">
+            <meta-data android:name="distractionOptimized" android:value="true" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

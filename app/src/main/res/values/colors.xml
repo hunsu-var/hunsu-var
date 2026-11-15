@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 깜빡이 앰버 (ui/Theme.kt Amber) -->
+    <color name="ic_launcher_bg">#FFA51F</color>
+</resources>
