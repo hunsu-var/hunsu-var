@@ -135,6 +135,7 @@ scripts/vhal.sh stop          # 하트비트 종료
 |---|---|
 | 호스트 | macOS (Apple Silicon, arm64) |
 | 에뮬레이터 | Pleos Connect Emulator 2.1.0, Android 14 / API 34, arm64 (AVD: RAM 4GB, Cold boot) |
+| 화면 규격 | 에뮬레이터 화면 2560×1440 px, 160 dpi(1 dp = 1 px). 앱이 쓰는 영역은 오른쪽 1700×1184 dp (왼쪽은 Pleos 시스템 Driving 화면) |
 | Pleos SDK | Vehicle 2.3.2, NaviHelper 3.0.5 (`nexus-playground.pleos.ai`, 토큰 필요 없음) |
 | 빌드 | JDK 17, Gradle 8.14.3, AGP 8.8.2, Kotlin 2.1.20, Compose BOM 2024.12.01 |
 | minSdk / targetSdk / compileSdk | 28 / 35 / 35 |
